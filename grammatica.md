@@ -29,11 +29,11 @@ Stmt'
 -> ELSE LCUR Stmt RCUR Stmt'
 | ε
 
-Expr
--> Expr Relop Expr
-| ID
-| INUMBER
-| FNUMBER
+Expr -> Term Expr'
+
+Expr' -> Relop Expr | ε
+
+Term -> ID | INUMBER | FNUMBER
 
 }
 

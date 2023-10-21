@@ -1,6 +1,8 @@
-La grammatica inizalmente presenta una riscorsione sinistra:
+La grammatica inizalmente presenta due riscorsioni a sinistra:
 
-Program
+
+
+1) Program
 -> Program SEMI Stmt
 | Stmt
 
@@ -13,6 +15,22 @@ Program
 
 Program'
 ->  SEMI Stmt Program' | ε 
+
+
+
+2) Expr
+-> Expr Relop Expr
+| ID
+| INUMBER
+| FNUMBER
+   
+Il risultato è:
+
+Expr -> Term Expr'
+
+Expr' -> Relop Expr | ε
+
+Term -> ID | INUMBER | FNUMBER
 
 
 La grammatica inizalmente presenta una fattorizzazione sinistra:
