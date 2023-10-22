@@ -29,26 +29,24 @@ Stmt'
 -> ELSE LCUR Stmt RCUR Stmt'
 | ε
 
-Expr -> Term Expr'
+Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
 
-Expr' -> Relop Expr | ε
-
-Term -> ID | INUMBER | FNUMBER
+Expr' -> Relop Expr Expr' | ε
 
 }
 
 ### First e Follow
 
-|          | First                                      | Follow                                                                    |
-|----------|--------------------------------------------|---------------------------------------------------------------------------|
-| Relop    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV | $                                                                         |
-| S        | IF, ID, WHILE                              | EOF, $                                                                    |
-| Program  | IF, ID, WHILE                              | EOF, $                                                                    |
-| Program' | SEMI, ε                                    | EOF, $                                                                    |
-| Stmt     | IF, ID, WHILE                              | EOF, SEMI, RCUR, IF, $                                                    |
-| Stmt'    | LPAR                                       | EOF, ELSE, $                                                              |
-| Expr     | ID, INUMBER, FNUMBER                       | EOF, LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV,RPAR, SEMI, RCUR, LPAR, $ |
-
+|          | First                                          | Follow                                                            |
+|----------|------------------------------------------------|-------------------------------------------------------------------|
+| Relop    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV     | ID, INUMBER, FNUMBER                                                                 |
+| S        | IF, ID, WHILE                                  | $                                                                 |
+| Program  | IF, ID, WHILE                                  | EOF                                                               |
+| Program' | SEMI, ε                                        | EOF                                                               |
+| Stmt     | IF, ID, WHILE                                  | SEMI, EOF, RCUR                                                   |
+| Stmt'    | ELSE, ε                                        | SEMI, EOF, RCUR                                                   |
+| Expr     | ID, INUMBER, FNUMBER                           | RPAR, SEMI, EOF, RCUR, LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV |
+| Expr'    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV , ε | RPAR, SEMI, EOF, RCUR, LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV |
 
 ### Parsing table 
 | Lessema | Nome del token | Attributo |

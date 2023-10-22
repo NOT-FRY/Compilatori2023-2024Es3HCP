@@ -26,11 +26,10 @@ Program'
    
 Il risultato è:
 
-Expr -> Term Expr'
+Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
 
-Expr' -> Relop Expr | ε
+Expr' -> Relop Expr Expr' | ε
 
-Term -> ID | INUMBER | FNUMBER
 
 
 La grammatica inizalmente presenta una fattorizzazione sinistra:
