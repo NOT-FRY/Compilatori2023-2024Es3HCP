@@ -11,6 +11,9 @@ P = {
 Relop
 -> LE | LT |GT | GE | EQ | NE | ADD | MIN | MUL | DIV
 
+Relop
+-> LE \| LT \|GT \| GE \| EQ \| NE \| ADD \| MIN \| MUL \| DIV
+
 S
 -> Program  EOF
 
@@ -49,19 +52,18 @@ Expr' -> Relop Expr Expr' | ε
 | Expr'    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV , ε | RPAR, SEMI, EOF, RCUR, LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV |
 
 ### Parsing table 
-| Lessema | Nome del token | Attributo |
-|---------|----------------|-----------|
-| <--     | *ASS*          | -         |
-| <       | *LT*           | -         |
-| <=      | *LE*           | -         |
-| \>      | *GT*           | -         |
-| \>=     | *GE*           | -         |
-| =       | *EQ*           | -         |
-| !=      | *NE*           | -         |
-| +       | *ADD*          | -         |
-| -       | *MIN*          | -         |
-| *       | *MUL*          | -         |
-| /       | *DIV*          | -         |
+|          | EOF   | SEMI | COM | IF | ELSE | ID | ASS | WHILE | LOOP | INUMBER | FNUMBER | RPAR | LPAR | RCUR | LCUR | LE | LT | GT | GE | EQ | NE | ADD | MIN | MUL | DIV | $ |
+|----------|-------|------|-----|----|------|----|-----|-------|------|---------|---------|------|------|------|------|----|----|----|----|----|----|-----|-----|-----|-----|---|
+| Relop    |       |      |     |    |      |    |     |       |      |         |         |      |      |      |      |    |
+| S        | *LE*  | -    |
+| Program  | *GT*  | -    |
+| Program' | *GE*  | -    |
+| Stmt     | *EQ*  | -    |
+| Stmt'    | *NE*  | -    |
+| Expr     | *ADD* | -    |
+| Expr'    | *MIN* | -    |
+| *MUL*    | -     |
+| *DIV*    | -     |
 
 
 
