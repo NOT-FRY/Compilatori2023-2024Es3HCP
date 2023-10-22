@@ -2,8 +2,7 @@
 
 N = {S, Program, Stmt, Expr, Relop},
 
-T = {EOF, SEMI, COM, IF, ELSE, ID, ASS, WHILE, LOOP, INUMBER, FNUMBER, RPAR, LPAR, RCUR, LCUR},  
-
+T = {EOF, SEMI , IF, THEN, ELSE, END, ID, ASSIGN, WHILE, LOOP, RELOP, NUMBER},  
 S
 
 P = {
@@ -21,13 +20,14 @@ Program'
 ->  SEMI Stmt Program' | ε
 
 Stmt
--> IF LPAR Expr RPAR LCUR Stmt RCUR Stmt'
+-> IF Expr THEN Stmt END IF Stmt' 
 | ID ASS Expr
-| WHILE LPAR Expr RPAR LCUR Stmt RCUR
+| WHILE  Expr LOOP Stmt END LOOP
 
 Stmt'
--> ELSE LCUR Stmt RCUR Stmt'
+-> ELSE  Stmt Stmt' END IF
 | ε
+
 
 Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
 
@@ -39,7 +39,7 @@ Expr' -> Relop Expr Expr' | ε
 
 |          | First                                          | Follow                                                            |
 |----------|------------------------------------------------|-------------------------------------------------------------------|
-| Relop    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV     | ID, INUMBER, FNUMBER                                                                 |
+| Relop    | LE, LT, GT, GE, EQ, NE, ADD, MIN, MUL, DIV     | ID, INUMBER, FNUMBER                                              |
 | S        | IF, ID, WHILE                                  | $                                                                 |
 | Program  | IF, ID, WHILE                                  | EOF                                                               |
 | Program' | SEMI, ε                                        | EOF                                                               |
