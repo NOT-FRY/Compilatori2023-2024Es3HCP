@@ -1,7 +1,5 @@
 La grammatica inizalmente presenta due riscorsioni a sinistra:
 
-
-
 1) Program
 -> Program SEMI Stmt
 | Stmt
