@@ -74,3 +74,25 @@ OpenStmt'
 | MatchedStmt ELSE OpenStmt
 
 
+
+Dopo vari tentativi, si è notata un' ambiguità residua nella grammatica, dovuta al problema del "dangling else"
+e si è deciso di eliminarla utilizzando il seguente costrutto:
+
+Stmt
+->
+MatchedStmt | OpenStmt
+
+MatchedStmt
+->
+IF Expr THEN MatchedStmt ELSE MatchedStmt
+| ID ASS Expr
+| WHILE  Expr LOOP MatchedStmt END LOOP
+
+OpenStmt->
+IF Expr THEN OpenStmt'
+
+OpenStmt'
+-> Stmt
+| MatchedStmt ELSE OpenStmt
+
+
