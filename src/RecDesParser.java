@@ -1,5 +1,32 @@
 import java.io.EOFException;
+/*
+* S
+-> Program  EOF
 
+Relop
+-> LE | LT |GT | GE | EQ | NE | ADD | MIN | MUL | DIV
+
+
+Program
+-> Stmt Program'
+
+Program'
+->  SEMI Stmt Program' | ε
+
+Stmt
+-> IF Expr THEN Stmt END IF Stmt'
+| ID ASS Expr
+| WHILE  Expr LOOP Stmt END LOOP
+
+Stmt'
+-> ELSE  Stmt END IF Stmt'
+| ε
+
+Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
+
+Expr' -> Relop Expr Expr' | ε
+*
+* */
 public class RecDesParser {
     static int ptr;
 
@@ -43,28 +70,60 @@ public class RecDesParser {
         currentToken = lexer.next_token();
 
         if(currentToken.getName().equals("IF")){
-            currentToken = lexer.next_token();
-            if(currentToken.getName().equals("LPAR")){
-                if(!Expr()) {
-                    return false;
-                }else{
-                    currentToken = lexer.next_token();
-                    if(currentToken.getName().equals("RPAR")) {
+            if(Expr()) {
+                currentToken = lexer.next_token();
+                if (currentToken.getName().equals("THEN")) {
+                    if(Stmt()){
                         currentToken = lexer.next_token();
-                        if(currentToken.getName().equals("LPAR")) {
-
-                        }else{
+                        if(!currentToken.getName().equals("END"))
                             return false;
+                        currentToken = lexer.next_token();
+                        if(!currentToken.getName().equals("IF"))
+                            return false;
+                        if(Stmt1()){
+                            return true;
                         }
                     }else{
                         return false;
                     }
+                } else {
+                    return false;
                 }
-            }else{
+            }else {
                 return false;
             }
 
-        }
+        }else if(currentToken.getName().equals("ID")){
+            currentToken = lexer.next_token();
+            if(!currentToken.getName().equals("ASS"))
+                return false;
+            if(Expr())
+                return true;
+            else
+                return false;
+        }else if(currentToken.getName().equals("WHILE")){
+            if(Expr()) {
+                currentToken = lexer.next_token();
+                if(!currentToken.getName().equals("LOOP"))
+                    return false;
+                if(Stmt()){
+                    currentToken = lexer.next_token();
+                    if(!currentToken.getName().equals("END"))
+                        return false;
+                    currentToken = lexer.next_token();
+                    if(!currentToken.getName().equals("LOOP"))
+                        return false;
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }
+            else {
+                return false;
+            }
+        }else
+            return false;
     }
 
     public boolean Program1(){
