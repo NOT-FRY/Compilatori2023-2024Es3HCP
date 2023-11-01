@@ -130,10 +130,42 @@ public class RecDesParser {
 
     }
 
-    public boolean Expr(){
-
+    public boolean Expr() throws Exception{
+        currentToken = lexer.next_token();
+        if(currentToken.getName().equals("ID") || currentToken.getName().equals("INUMBER")|| currentToken.getName().equals("FNUMBER")){
+            if(Expr1()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-}
+    public boolean Expr1() throws Exception{
+        currentToken = lexer.next_token();
+        if(Relop()){
+            if (Expr()){
+                if(Expr1()){
+                    return true;
+                }
+            }
+        } else
+            return true;
+        return false;
+    }
+
+
+            public boolean Relop(){
+            if(currentToken.getName().equals("LE") || currentToken.getName().equals("LT")
+                    || currentToken.getName().equals("GT")|| currentToken.getName().equals("GE")
+                    || currentToken.getName().equals("EQ")|| currentToken.getName().equals("NE")
+                    || currentToken.getName().equals("ADD")|| currentToken.getName().equals("MIN")
+                    || currentToken.getName().equals("MUL")|| currentToken.getName().equals("DIV")){
+
+                return true;
+
+            }
+                return false;
+            }
+    }
 
 
