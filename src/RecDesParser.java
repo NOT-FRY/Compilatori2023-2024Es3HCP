@@ -80,9 +80,7 @@ public class RecDesParser {
                         currentToken = lexer.next_token();
                         if(!currentToken.getName().equals("IF"))
                             return false;
-                        if(Stmt1()){
-                            return true;
-                        }
+                        return Stmt1();
                     }else{
                         return false;
                     }
@@ -97,10 +95,8 @@ public class RecDesParser {
             currentToken = lexer.next_token();
             if(!currentToken.getName().equals("ASS"))
                 return false;
-            if(Expr())
-                return true;
-            else
-                return false;
+            return Expr();
+
         }else if(currentToken.getName().equals("WHILE")){
             if(Expr()) {
                 currentToken = lexer.next_token();
@@ -126,12 +122,40 @@ public class RecDesParser {
             return false;
     }
 
-    public boolean Program1(){
-
+    public boolean Program1() throws Exception{
+        currentToken = lexer.next_token();
+        if(currentToken.getName().equals("SEMI")){
+            if(Stmt()){
+                return Program1();
+            }else{
+                return false;
+            }
+        }else{ //ε
+            return true;
+        }
     }
 
     public boolean Expr(){
 
+    }
+
+    public boolean Stmt1() throws Exception{
+        currentToken = lexer.next_token();
+        if(currentToken.getName().equals("ELSE")){
+            if(Stmt()){
+                currentToken = lexer.next_token();
+                if(!currentToken.getName().equals("END"))
+                    return false;
+                currentToken = lexer.next_token();
+                if(!currentToken.getName().equals("IF"))
+                    return false;
+                return Stmt1();
+            }else{
+                return false;
+            }
+        }else{ // ε
+            return true;
+        }
     }
 
 }
