@@ -2,8 +2,9 @@ if id < 2.0 then
     while id loop
         if y < id then
             while id loop x <-- id end loop
+        end if
         else
             x <-- 3
         end if
-    end loop 
+    end loop
 end if

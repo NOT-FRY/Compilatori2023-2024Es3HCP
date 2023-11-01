@@ -1,3 +1,5 @@
+## Correzione grammatica 
+
 La grammatica inizalmente presenta due riscorsioni a sinistra:
 
 
@@ -53,4 +55,12 @@ Stmt'
 -> ELSE LCUR Stmt RCUR Stmt'
 | ε
 
-
+## Correzioni effettuate nei test forniti:
+* file_source1 : aggiunti "end if" richiesti dalla grammatica a riga 5 e 10
+* file_source2: rimosso ";" prima dell'else e rimosso punto riga 5 per farlo identificare come FNUMBER
+* file_source3: rimosso "if" pendente riga 2
+* file_source4: inserito "end if" richiesto a riga 3, 9, 16, rimosso ";" riga 19
+* file_source5: sostituito "while" con if, aggiunto "end if" righe 3,6 e rimossi ";"
+* file_source6: sistemate costanti numeriche righe 1 e 3 per farle riconoscere come FNUMBER, aggiunta assegnazione alle righe 3 e 6, aggiunto "end if" riga 4
+* file_source7: rimossi caratteri "." a righe 1 e 22 per far identificare costanti come FNUMBER, inseriti "end if" righe 4, 8, 16, 25, 29, 37, rimosso ";" riga 41
+* file_source8: inserito "end if" riga 5

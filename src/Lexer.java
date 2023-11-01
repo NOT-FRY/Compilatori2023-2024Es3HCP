@@ -21,6 +21,8 @@ public class Lexer {
         stringTable.put("while", new Token("WHILE"));
         stringTable.put("int", new Token("INT"));
         stringTable.put("float", new Token("FLOAT"));
+        stringTable.put("end", new Token("END"));
+        stringTable.put("loop", new Token("LOOP"));
 
         logger = Logger.getLogger(this.getClass().getName());
 
