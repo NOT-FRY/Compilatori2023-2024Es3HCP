@@ -1,0 +1,3 @@
+if var < 100 then
+    var <= 3
+end if
