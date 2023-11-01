@@ -29,8 +29,6 @@ Expr' -> Relop Expr Expr' | ε
 *
 * */
 public class RecDesParser {
-    static int ptr;
-
     private Lexer lexer;
     private Token currentToken;
 
@@ -121,6 +119,10 @@ public class RecDesParser {
             return false;
     }
 
+    /*
+    *
+    * Program'->  SEMI Stmt Program' | ε
+    * */
     public boolean Program1() throws Exception {
         currentToken = lexer.next_token();
         if (currentToken.getName().equals("SEMI")) {
@@ -134,6 +136,12 @@ public class RecDesParser {
         }
     }
 
+    /*
+    *
+    * Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
+    *
+    * */
+
     public boolean Expr() throws Exception {
         currentToken = lexer.next_token();
         if (currentToken.getName().equals("ID") || currentToken.getName().equals("INUMBER") || currentToken.getName().equals("FNUMBER")) {
@@ -143,7 +151,10 @@ public class RecDesParser {
         }
         return false;
     }
-
+    /*
+    *
+    * Expr' -> Relop Expr Expr' | ε
+    * */
     public boolean Expr1() throws Exception {
         currentToken = lexer.next_token();
         if (Relop()) {
@@ -157,6 +168,7 @@ public class RecDesParser {
         return false;
     }
 
+    //Relop-> LE | LT |GT | GE | EQ | NE | ADD | MIN | MUL | DIV
 
     public boolean Relop() {
         if (currentToken.getName().equals("LE") || currentToken.getName().equals("LT")
@@ -171,6 +183,10 @@ public class RecDesParser {
         return false;
     }
 
+    /*
+    * Stmt'-> ELSE  Stmt END IF Stmt'| ε
+    *
+    * */
     public boolean Stmt1() throws Exception {
         currentToken = lexer.next_token();
         if (currentToken.getName().equals("ELSE")) {
