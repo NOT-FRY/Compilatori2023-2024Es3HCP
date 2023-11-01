@@ -1,4 +1,5 @@
 import java.io.EOFException;
+
 /*
 * S
 -> Program  EOF
@@ -33,26 +34,25 @@ public class RecDesParser {
     private Lexer lexer;
     private Token currentToken;
 
-    public RecDesParser(String inputFile){
+    public RecDesParser(String inputFile) {
         lexer = new Lexer();
         lexer.initialize(inputFile);
         currentToken = null;
     }
 
-    public boolean S ()throws Exception{ //S-> Program  EOF
-        if(!Program()) {
+    public boolean S() throws Exception { //S-> Program  EOF
+        if (!Program()) {
             return false;
-        }
-        else {
+        } else {
             return currentToken.getName().equals("EOF");
         }
 
     }
 
-    public boolean Program()throws Exception{ // Program-> Stmt Program'
-        if(!Stmt()){
+    public boolean Program() throws Exception { // Program-> Stmt Program'
+        if (!Stmt()) {
             return false;
-        }else{
+        } else {
             return Program1();
         }
     }
@@ -69,87 +69,86 @@ public class RecDesParser {
     public boolean Stmt() throws Exception {
         currentToken = lexer.next_token();
 
-        if(currentToken.getName().equals("IF")){
-            if(Expr()) {
+        if (currentToken.getName().equals("IF")) {
+            if (Expr()) {
                 currentToken = lexer.next_token();
                 if (currentToken.getName().equals("THEN")) {
-                    if(Stmt()){
+                    if (Stmt()) {
                         currentToken = lexer.next_token();
-                        if(!currentToken.getName().equals("END"))
+                        if (!currentToken.getName().equals("END"))
                             return false;
                         currentToken = lexer.next_token();
-                        if(!currentToken.getName().equals("IF"))
+                        if (!currentToken.getName().equals("IF"))
                             return false;
                         return Stmt1();
-                    }else{
+                    } else {
                         return false;
                     }
                 } else {
                     return false;
                 }
-            }else {
+            } else {
                 return false;
             }
 
-        }else if(currentToken.getName().equals("ID")){
+        } else if (currentToken.getName().equals("ID")) {
             currentToken = lexer.next_token();
-            if(!currentToken.getName().equals("ASS"))
+            if (!currentToken.getName().equals("ASS"))
                 return false;
             return Expr();
 
-        }else if(currentToken.getName().equals("WHILE")){
-            if(Expr()) {
+        } else if (currentToken.getName().equals("WHILE")) {
+            if (Expr()) {
                 currentToken = lexer.next_token();
-                if(!currentToken.getName().equals("LOOP"))
+                if (!currentToken.getName().equals("LOOP"))
                     return false;
-                if(Stmt()){
+                if (Stmt()) {
                     currentToken = lexer.next_token();
-                    if(!currentToken.getName().equals("END"))
+                    if (!currentToken.getName().equals("END"))
                         return false;
                     currentToken = lexer.next_token();
-                    if(!currentToken.getName().equals("LOOP"))
+                    if (!currentToken.getName().equals("LOOP"))
                         return false;
                     return true;
-                }else{
+                } else {
                     return false;
                 }
 
-            }
-            else {
+            } else {
                 return false;
             }
-        }else
+        } else
             return false;
     }
 
-    public boolean Program1() throws Exception{
+    public boolean Program1() throws Exception {
         currentToken = lexer.next_token();
-        if(currentToken.getName().equals("SEMI")){
-            if(Stmt()){
+        if (currentToken.getName().equals("SEMI")) {
+            if (Stmt()) {
                 return Program1();
-            }else{
+            } else {
                 return false;
             }
-        }else{ //ε
+        } else { //ε
             return true;
         }
     }
 
-    public boolean Expr() throws Exception{
+    public boolean Expr() throws Exception {
         currentToken = lexer.next_token();
-        if(currentToken.getName().equals("ID") || currentToken.getName().equals("INUMBER")|| currentToken.getName().equals("FNUMBER")){
-            if(Expr1()) {
+        if (currentToken.getName().equals("ID") || currentToken.getName().equals("INUMBER") || currentToken.getName().equals("FNUMBER")) {
+            if (Expr1()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean Expr1() throws Exception{
+    public boolean Expr1() throws Exception {
         currentToken = lexer.next_token();
-        if(Relop()){
-            if (Expr()){
-                if(Expr1()){
+        if (Relop()) {
+            if (Expr()) {
+                if (Expr1()) {
                     return true;
                 }
             }
@@ -159,34 +158,34 @@ public class RecDesParser {
     }
 
 
-            public boolean Relop(){
-            if(currentToken.getName().equals("LE") || currentToken.getName().equals("LT")
-                    || currentToken.getName().equals("GT")|| currentToken.getName().equals("GE")
-                    || currentToken.getName().equals("EQ")|| currentToken.getName().equals("NE")
-                    || currentToken.getName().equals("ADD")|| currentToken.getName().equals("MIN")
-                    || currentToken.getName().equals("MUL")|| currentToken.getName().equals("DIV")){
+    public boolean Relop() {
+        if (currentToken.getName().equals("LE") || currentToken.getName().equals("LT")
+                || currentToken.getName().equals("GT") || currentToken.getName().equals("GE")
+                || currentToken.getName().equals("EQ") || currentToken.getName().equals("NE")
+                || currentToken.getName().equals("ADD") || currentToken.getName().equals("MIN")
+                || currentToken.getName().equals("MUL") || currentToken.getName().equals("DIV")) {
 
-                return true;
+            return true;
 
-            }
-                return false;
-            }
+        }
+        return false;
     }
-    public boolean Stmt1() throws Exception{
+
+    public boolean Stmt1() throws Exception {
         currentToken = lexer.next_token();
-        if(currentToken.getName().equals("ELSE")){
-            if(Stmt()){
+        if (currentToken.getName().equals("ELSE")) {
+            if (Stmt()) {
                 currentToken = lexer.next_token();
-                if(!currentToken.getName().equals("END"))
+                if (!currentToken.getName().equals("END"))
                     return false;
                 currentToken = lexer.next_token();
-                if(!currentToken.getName().equals("IF"))
+                if (!currentToken.getName().equals("IF"))
                     return false;
                 return Stmt1();
-            }else{
+            } else {
                 return false;
             }
-        }else{ // ε
+        } else { // ε
             return true;
         }
     }
