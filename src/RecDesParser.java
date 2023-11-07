@@ -39,12 +39,6 @@ public class RecDesParser {
         lexer = new Lexer();
         lexer.initialize(inputFile);
         tokenList = new ArrayList<Token>();
-        Token t = lexer.next_token();
-        while(!t.getName().equals("EOF")){
-            tokenList.add(t);
-            t = lexer.next_token();
-        }
-        tokenList.add(t);//aggiungo EOF
         currentToken = null;
         currentTokenIndex = 0;
     }
@@ -77,17 +71,17 @@ public class RecDesParser {
 
     public boolean Stmt() throws Exception {
 
-        currentToken = tokenList.get(currentTokenIndex++);
+        currentToken = getNextToken();
 
         if (currentToken.getName().equals("IF")) {
             if (Expr()) {
-                currentToken = tokenList.get(currentTokenIndex++);
+                currentToken = getNextToken();
                 if (currentToken.getName().equals("THEN")) {
                     if (Stmt()) {
-                        currentToken = tokenList.get(currentTokenIndex++);
+                        currentToken = getNextToken();
                         if (!currentToken.getName().equals("END"))
                             return false;
-                        currentToken = tokenList.get(currentTokenIndex++);
+                        currentToken = getNextToken();
                         if (!currentToken.getName().equals("IF"))
                             return false;
                         return Stmt1();
@@ -102,21 +96,21 @@ public class RecDesParser {
             }
 
         } else if (currentToken.getName().equals("ID")) {
-            currentToken = tokenList.get(currentTokenIndex++);
+            currentToken = getNextToken();
             if (!currentToken.getName().equals("ASS"))
                 return false;
             return Expr();
 
         } else if (currentToken.getName().equals("WHILE")) {
             if (Expr()) {
-                currentToken = tokenList.get(currentTokenIndex++);
+                currentToken = getNextToken();
                 if (!currentToken.getName().equals("LOOP"))
                     return false;
                 if (Stmt()) {
-                    currentToken = tokenList.get(currentTokenIndex++);
+                    currentToken = getNextToken();
                     if (!currentToken.getName().equals("END"))
                         return false;
-                    currentToken = tokenList.get(currentTokenIndex++);
+                    currentToken = getNextToken();
                     if (!currentToken.getName().equals("LOOP"))
                         return false;
                     return true;
@@ -136,15 +130,15 @@ public class RecDesParser {
     * Program'->  SEMI Stmt Program' | ε
     * */
     public boolean Program1() throws Exception {
-        currentToken = tokenList.get(currentTokenIndex++);
+        currentToken = getNextToken();
         if (currentToken.getName().equals("SEMI")) {
             if (Stmt()) {
                 return Program1();
             } else {
                 return false;
             }
-        } else { //ε
-            currentTokenIndex--;
+        } else {
+            fallback();
             return true;
         }
     }
@@ -156,7 +150,7 @@ public class RecDesParser {
     * */
 
     public boolean Expr() throws Exception {
-        currentToken = tokenList.get(currentTokenIndex++);
+        currentToken = getNextToken();
         if (currentToken.getName().equals("ID") || currentToken.getName().equals("INUMBER") || currentToken.getName().equals("FNUMBER")) {
             if (Expr1()) {
                 return true;
@@ -169,15 +163,15 @@ public class RecDesParser {
     * Expr' -> Relop Expr Expr' | ε
     * */
     public boolean Expr1() throws Exception {
-        currentToken = tokenList.get(currentTokenIndex++);
+        currentToken = getNextToken();
         if (Relop()) {
             if (Expr()) {
                 if (Expr1()) {
                     return true;
                 }
             }
-        } else {
-            currentTokenIndex--;
+        } else { //ε
+            fallback();
             return true;
         }
         return false;
@@ -203,13 +197,13 @@ public class RecDesParser {
     *
     * */
     public boolean Stmt1() throws Exception {
-        currentToken = tokenList.get(currentTokenIndex++);
+        currentToken = getNextToken();
         if (currentToken.getName().equals("ELSE")) {
             if (Stmt()) {
-                currentToken = tokenList.get(currentTokenIndex++);
+                currentToken = getNextToken();
                 if (!currentToken.getName().equals("END"))
                     return false;
-                currentToken = tokenList.get(currentTokenIndex++);
+                currentToken = getNextToken();
                 if (!currentToken.getName().equals("IF"))
                     return false;
                 return Stmt1();
@@ -217,9 +211,23 @@ public class RecDesParser {
                 return false;
             }
         } else { // ε
-            currentTokenIndex--;
+            fallback();
             return true;
         }
+    }
+
+    public Token getNextToken()throws Exception{
+        if( currentTokenIndex == tokenList.size()) {
+            tokenList.add(lexer.next_token());
+        }else{//Ho fatto fallback, non devo leggere token
+            return tokenList.get(currentTokenIndex++);
+        }
+
+        return tokenList.get(currentTokenIndex++);
+    }
+
+    public void fallback(){
+        currentTokenIndex--;
     }
 
 }
