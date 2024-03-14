@@ -9,14 +9,14 @@ public class Tester {
             System.exit(1);
         }
 
-        String filePath = "test_files" + File.separator +args[0];
+        String filePath = File.separator +args[0];
         RecDesParser parser = new RecDesParser(filePath);
         boolean isValidInput = parser.S();
         System.out.println("Esecuzione del parser sul file "+filePath);
         if(isValidInput){
-            System.out.println("Input is valid.");
+            System.out.println("Input is valid");
         }else{
-            System.out.println("Syntax Error.");
+            System.out.println("Syntax error");
         }
 
     }
