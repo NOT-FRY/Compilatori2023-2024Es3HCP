@@ -23,8 +23,9 @@ Stmt
 | WHILE  Expr LOOP Stmt END LOOP
 
 Stmt'
--> ELSE  Stmt END IF Stmt'
-| ε
+-> ELSE  Stmt END IF
+| END IF
+
 
 Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
 
@@ -65,9 +66,10 @@ public class RecDesParser {
     /*
     *
     *
-      Stmt -> IF LPAR Expr RPAR LCUR Stmt RCUR Stmt'
-            | ID ASS Expr
-            | WHILE LPAR Expr RPAR LCUR Stmt RCUR
+        Stmt
+        -> IF Expr THEN Stmt Stmt'
+        | ID ASS Expr
+        | WHILE  Expr LOOP Stmt END LOOP
     *
     * */
 
@@ -80,12 +82,6 @@ public class RecDesParser {
                 currentToken = getNextToken();
                 if (currentToken.getName().equals("THEN")) {
                     if (Stmt()) {
-                        currentToken = getNextToken();
-                        if (!currentToken.getName().equals("END"))
-                            return false;
-                        currentToken = getNextToken();
-                        if (!currentToken.getName().equals("IF"))
-                            return false;
                         return Stmt1();
                     } else {
                         return false;
@@ -195,7 +191,10 @@ public class RecDesParser {
     }
 
     /*
-    * Stmt'-> ELSE  Stmt END IF Stmt'| ε
+    *
+    *   Stmt'
+        -> ELSE  Stmt END IF
+        | END IF
     *
     * */
     public boolean Stmt1() throws Exception {
@@ -208,12 +207,16 @@ public class RecDesParser {
                 currentToken = getNextToken();
                 if (!currentToken.getName().equals("IF"))
                     return false;
-                return Stmt1();
+                return true;
             } else {
                 return false;
             }
-        } else { // ε
-            fallback();
+        } else {
+            if (!currentToken.getName().equals("END"))
+                return false;
+            currentToken = getNextToken();
+            if (!currentToken.getName().equals("IF"))
+                return false;
             return true;
         }
     }

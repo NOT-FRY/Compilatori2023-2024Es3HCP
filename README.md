@@ -37,23 +37,23 @@ Expr' -> Relop Expr Expr' | ε
 La grammatica inizalmente presenta una fattorizzazione sinistra:
 
 Stmt
--> IF LPAR Expr RPAR LCUR Stmt RCUR
-| IF LPAR Expr RPAR LCUR Stmt RCUR ELSE LCUR Stmt RCUR
-| ID ASS Expr
-| WHILE LPAR Expr RPAR LCUR Stmt RCUR
+-> IF Expr THEN Stmt END IF
+| IF Expr THEN Stmt ELSE Stmt END IF
+| ID ASSIGN Expr
+| WHILE Expr LOOP Stmt END LOOP
 
 È stata eliminata applicando le regole per la rimozione di una fattorizzazione sinistra.
 
 Il risultato è:
 
 Stmt
--> IF LPAR Expr RPAR LCUR Stmt RCUR Stmt'
+-> IF Expr THEN Stmt Stmt'
 | ID ASS Expr
-| WHILE LPAR Expr RPAR LCUR Stmt RCUR
+| WHILE  Expr LOOP Stmt END LOOP
 
 Stmt'
--> ELSE LCUR Stmt RCUR Stmt'
-| ε
+-> ELSE  Stmt END IF
+| END IF
 
 ## Correzioni effettuate nei test forniti:
 * file_source1 : aggiunti "end if" richiesti dalla grammatica a riga 5 e 10

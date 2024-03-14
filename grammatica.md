@@ -21,13 +21,13 @@ Program'
 ->  SEMI Stmt Program' | ε
 
 Stmt
--> IF Expr THEN Stmt END IF Stmt' 
+-> IF Expr THEN Stmt Stmt' 
 | ID ASS Expr
 | WHILE  Expr LOOP Stmt END LOOP
 
 Stmt'
--> ELSE  Stmt END IF Stmt' 
-| ε
+-> ELSE  Stmt END IF
+| END IF
 
 Expr -> ID Expr' | INUMBER Expr' | FNUMBER Expr'
 
