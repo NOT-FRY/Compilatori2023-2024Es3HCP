@@ -9,10 +9,10 @@ public class Tester {
             System.exit(1);
         }
 
-        String filePath = File.separator +args[0];
-        RecDesParser parser = new RecDesParser(filePath);
+        //String filePath = "test_files" + File.separator +args[0];
+        RecDesParser parser = new RecDesParser(args[0]);
         boolean isValidInput = parser.S();
-        System.out.println("Esecuzione del parser sul file "+filePath);
+        System.out.println("Esecuzione del parser sul file "+args[0]);
         if(isValidInput){
             System.out.println("Input is valid");
         }else{
