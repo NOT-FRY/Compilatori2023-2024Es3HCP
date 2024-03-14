@@ -39,7 +39,7 @@ public class Lexer {
         try {
             fr = new RandomAccessFile(input, "r");
         } catch (FileNotFoundException e) {
-            logger.info(e.getMessage());
+            //logger.info(e.getMessage());
             return false;
         }
 
@@ -69,7 +69,7 @@ public class Lexer {
                     throw new EOFException();
                 }
             } catch (IOException e) {
-                logger.info(e.getMessage());
+                //logger.info(e.getMessage());
                 return new Token("EOF");
             }
 
@@ -505,7 +505,7 @@ public class Lexer {
         try {
             fr.seek(fr.getFilePointer() - 1);
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            //logger.info(e.getMessage());
         }
     }
 
@@ -517,7 +517,7 @@ public class Lexer {
             }
 
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            //logger.info(e.getMessage());
             return true;
         }
         retrack();
